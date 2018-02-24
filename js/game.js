@@ -11,11 +11,12 @@ var border;
 
 var flipperLeft, flipperRight;
 
-var keyboard;
+var keyboard, clock;
 
 init();
 function init() {
   initWindow();
+  loader = new THREE.JSONLoader();
   initScene();
   loadComponents();
 
@@ -74,16 +75,21 @@ function loadComponents() {
   // Machine
   machine = new Machine();
 
+  keyboard = new THREEx.KeyboardState();
+  clock = new THREE.Clock();
+
   flipperLeft = new Flipper(true);
   // scene.add(flipperLeft.mesh);
 
   flipperRight = new Flipper(false);
   // scene.add(flipperRight.mesh);
 
-  // Border
-  loader.load('/res/border2.json', function(geometry) {
+  // Cube
+  loader.load('cube.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
     var mesh = new THREE.Mesh(geometry, material);
+    mesh.scale.set(10, 10, 10);
+    mesh.position.set(-20, 5, 20);
     scene.add(mesh);
     mesh.position.y = 1;
     border = new Component(new THREE.Vector3(0, 0.1, 0), mesh);
@@ -98,9 +104,13 @@ function loop() {
 }
 
 function update() {
+    var delta = clock.getDelta();
+
     machine.update();
-    flipperLeft.update();
-    flipperRight.update();
+    flipperLeft.update(delta);
+    flipperLeft.physicsStep();
+    flipperRight.update(delta);
+    flipperRight.physicsStep();
 }
 
 function render() {
