@@ -5,9 +5,9 @@ class Component
         this.position_ = new THREE.Vector3(0, 0, 0);
         //Built in mesh object has geometry and material
         //Mesh has geometry + material
-        this.geometry_ = new THREE.BoxGeometry(position); 
+        this.geometry_ = new THREE.BoxGeometry(this.position);
         this.color_ = 0x00ff00;
-        this.material_ = new THREE.MeshBasicMaterial({color}); 
+        this.material_ = new THREE.MeshBasicMaterial({color: this.color_});
         this.mesh_ = new THREE.Mesh(geometry, material);
         //Floating point value representing extent of bounciness
         this.bounciness_ = 0.0;
@@ -26,6 +26,13 @@ class Component
         this.velocity_ = velocity;
         this.acceleration_ = acceleration;
         this.pointValue_ = pointValue;
+    }
+
+    // In degrees
+    rotate(x, y, z) {
+        this.mesh_.rotateX(x);
+        this.mesh_.rotateY(y);
+        this.mesh_.rotateZ(z);
     }
 
     get position() {
