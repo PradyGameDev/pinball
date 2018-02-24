@@ -6,6 +6,10 @@ var jsonLoader;
 var ball, cube, ground;
 var orbitControls;
 
+var flipperLeft, flipperRight;
+
+var keyboard;
+
 init();
 function init() {
   initWindow();
@@ -60,6 +64,14 @@ function initScene() {
 
   machine = new Machine();
 
+  keyboard = new THREEx.KeyboardState();
+
+  flipperLeft = new Flipper(true);
+  scene.add(flipperLeft.mesh);
+
+  flipperRight = new Flipper(false);
+  scene.add(flipperRight.mesh);
+
   // Cube
   loader.load('cube.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
@@ -71,15 +83,29 @@ function initScene() {
 }
 
 function loop() {
-  update();
-  render();
-  requestAnimationFrame(loop);
+    control();
+    update();
+    render();
+    requestAnimationFrame(loop);
 }
 
 function update() {
-
+    machine.update();
+    flipperLeft.update();
+    flipperRight.update();
 }
 
 function render() {
   renderer.render(scene, camera);
 }
+
+function control() {
+    if (keyboard.pressed("left")) {
+        flipperLeft.flip();
+    }
+
+    if (keyboard.pressed("right")) {
+        flipperRight.flip();
+    }
+}
+
