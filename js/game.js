@@ -47,8 +47,8 @@ function initScene() {
     camera.position.set(0, 2.2, 1.4);
     camera.rotation.x = -Math.PI / 3;
     // Top down
-    // camera.position.set(0, 3, 0);
-    // camera.rotation.x = -Math.PI / 2;
+    camera.position.set(0, 3, 0);
+    camera.rotation.x = -Math.PI / 2;
 
     // Renderer
     renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -75,6 +75,13 @@ function loadComponents() {
     loader = new THREE.JSONLoader();
 
     machine = new Machine();
+
+    // Ball
+    var geometry = new THREE.SphereGeometry(0.05, 32, 32);
+    var material = new THREE.MeshLambertMaterial({ color: 0xff00ff });
+    var mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    ball = new Ball(new THREE.Vector3(0, 0.05, 0), mesh);
 
     // improve loading mechanism
     var numLoaded = 0;
