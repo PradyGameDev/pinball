@@ -5,7 +5,7 @@ class Machine {
         // Floor
         this.geometry = new THREE.PlaneGeometry(1.113, 1.977, 0, 0);
         this.material = new THREE.MeshLambertMaterial({ color: 0x4CAF50, side: THREE.DoubleSide });
-        var floor = new THREE.Mesh(this.geometry, this.material);
+        var floor = new Physijs.ConvexMesh(this.geometry, this.material);
 
         floor.receiveShadow = true;
         // Flip horizontally

@@ -13,6 +13,9 @@ var flipperLeft, flipperRight;
 
 var keyboard, clock;
 
+Physijs.scripts.worker = "lib/physijs_worker.js";
+Physijs.scripts.ammo = "ammo.js";
+
 init();
 function init() {
     initWindow();
@@ -39,7 +42,8 @@ function initWindow() {
 
 function initScene() {
     // Scene
-    scene = new THREE.Scene();
+    scene = new Physijs.Scene;
+    scene.setGravity(new THREE.Vector3(0, -1, 0));
 
     // Camera
     camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
@@ -80,9 +84,9 @@ function loadComponents() {
     // Ball
     var geometry = new THREE.SphereGeometry(0.05, 32, 32);
     var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    var mesh = new Physijs.SphereMesh(geometry, material);
     ball = new Ball(new THREE.Vector3(0, 0.05, 0), mesh);
+    scene.add(mesh);
 
     // improve loading mechanism
     var numLoaded = 0;
@@ -91,13 +95,13 @@ function loadComponents() {
     loader.load('res/flipper.json', function(geometry) {
         var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
 
-        var mesh_left = new THREE.Mesh(geometry, material);
-        scene.add(mesh_left);
+        var mesh_left = new Physijs.ConvexMesh(geometry, material);
         flipperLeft = new Flipper(new THREE.Vector3(0, 0, 0), mesh_left, true);
+        scene.add(mesh_left);
 
-        var mesh_right = new THREE.Mesh(geometry, material);
-        scene.add(mesh_right);
+        var mesh_right = new Physijs.ConvexMesh(geometry, material);
         flipperRight = new Flipper(new THREE.Vector3(0, 0, 0), mesh_right, false);
+        scene.add(mesh_right);
 
         numLoaded++;
         if (numLoaded == numToLoad) {
@@ -107,11 +111,11 @@ function loadComponents() {
 
     loader.load('res/border.json', function(geometry) {
         var material = new THREE.MeshLambertMaterial({ color: 0xA1887F });
-        var mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
+        var mesh = new Physijs.ConvexMesh(geometry, material);
 
         // don't hard code values like 0.39131 or 0.1
         border = new Component(new THREE.Vector3(0, 0, 0), mesh);
+        scene.add(mesh);
 
         numLoaded++;
         if (numLoaded == numToLoad) {
@@ -123,6 +127,7 @@ function loadComponents() {
 function loop() {
     update();
     render();
+    scene.simulate();
     requestAnimationFrame(loop);
 }
 
@@ -137,8 +142,8 @@ function update() {
     }
 
     // Put this in a for loop
-    machine.update();
-    border.update();
+    // machine.update();
+    // border.update();
     flipperLeft.update(delta);
     flipperLeft.physicsStep(); // make this get called in flipper.update
     flipperRight.update(delta);
