@@ -78,20 +78,20 @@ function loadComponents() {
   keyboard = new THREEx.KeyboardState();
   clock = new THREE.Clock();
 
-  flipperLeft = new Flipper(true);
-  // scene.add(flipperLeft.mesh);
-
-  flipperRight = new Flipper(false);
-  // scene.add(flipperRight.mesh);
+  loader.load('flipper.json', function(geometry) {
+    var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+    var mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    mesh.position.y = 0.1;
+    flipperLeft = new Flipper(new Vector3(0, 0.1, 0), true);
+  });
 
   // Cube
   loader.load('border2.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
     var mesh = new THREE.Mesh(geometry, material);
-    mesh.scale.set(10, 10, 10);
-    mesh.position.set(-20, 5, 20);
     scene.add(mesh);
-    mesh.position.y = 1;
+    mesh.position.y = 0.1;
     border = new Component(new THREE.Vector3(0, 0.1, 0), mesh);
   });
 }

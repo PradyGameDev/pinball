@@ -5,13 +5,13 @@ function approxeq(x, y) {
 }
 
 class Flipper extends Component {
-    constructor(isLeft) {
-        super();
+    constructor(position, mesh, isLeft) {
+        super(position, mesh);
 
         this.isLeft = isLeft;
 
-        this.restRotation = this.mesh.rotation.clone();
-        this.targetRotation = this.mesh.rotation;
+        this.restRotation = this.mesh_.rotation.clone();
+        this.targetRotation = this.mesh_.rotation;
 
         this.flipping = false;
 

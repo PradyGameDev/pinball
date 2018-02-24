@@ -1,19 +1,16 @@
 class Component {
     constructor(position, mesh) {
-        //Position
         this.position_ = position;
-        //Built in mesh object has geometry and material
-        //Mesh has geometry + material
+        this.mesh_ = mesh;
+
         this.geometry_ = new THREE.BoxGeometry(this.position_);
         this.color_ = 0x00ff00;
         this.material_ = new THREE.MeshBasicMaterial({color: this.color_});
-        this.mesh_ = mesh;
-        //Floating point value representing extent of bounciness
+
         this.bounciness_ = 0.0;
         this.velocity_ = new THREE.Vector3(0, 0, 0);
         this.acceleration_ = new THREE.Vector3(0, 0, 0);
-        //Represents the point value of each component. The ball has no pointValue, whereas each of the collidable game objects have a score
-        //that gets added to each player's score upon collision.
+
         this.pointValue_ = 0;
     }
 
