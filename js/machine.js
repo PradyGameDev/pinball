@@ -3,8 +3,8 @@ class Machine {
         this.components = [];
 
         // Floor
-        var width = 50;
-        var height = 50;
+        var width = 2;
+        var height = 2;
         this.geometry = new THREE.PlaneGeometry(width, height, 4, 4);
         this.material = new THREE.MeshLambertMaterial({ color: 0x0000ff });
 

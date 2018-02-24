@@ -1,4 +1,5 @@
-var damping = new THREE.Euler(0, 0.4, 0, "XYZ");
+const FLIPPER_TIME = 0.1;
+const FLIPPER_BACK_TIME = 0.05;
 
 function approxeq(x, y) {
     return Math.abs(x - y) < 0.01;

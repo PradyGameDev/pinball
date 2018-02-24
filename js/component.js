@@ -24,6 +24,10 @@ class Component {
         this.pointValue_ = pointValue;
     }
 
+    physicsStep() {
+
+    }
+
     // In degrees
     rotate(x, y, z) {
         this.mesh_.rotateX(THREE.Math.degToRad(x));

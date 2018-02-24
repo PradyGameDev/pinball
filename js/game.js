@@ -16,13 +16,11 @@ var keyboard, clock;
 init();
 function init() {
   initWindow();
-  loader = new THREE.JSONLoader();
   initScene();
   loadComponents();
 
   keyboard = new THREEx.KeyboardState();
-
-  loop();
+  clock = new THREE.Clock();
 }
 
 function initWindow() {
@@ -55,9 +53,9 @@ function initScene() {
   document.body.appendChild(renderer.domElement);
 
   // DEBUG Orbit Controls
-  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-  orbitControls.addEventListener('change', renderer);
-  orbitControls.enableZoom = false;
+  // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  // orbitControls.addEventListener('change', renderer);
+  // orbitControls.enableZoom = false;
 
   // Lighting
   var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -75,36 +73,50 @@ function loadComponents() {
   // Machine
   machine = new Machine();
 
-  keyboard = new THREEx.KeyboardState();
-  clock = new THREE.Clock();
+  var numLoaded = 0;
+  var numToLoad = 2;
 
-  loader.load('flipper.json', function(geometry) {
+  loader.load('res/flipper1.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-    mesh.position.y = 0.1;
-    flipperLeft = new Flipper(new Vector3(0, 0.1, 0), true);
+    var mesh_left = new THREE.Mesh(geometry, material);
+    var mesh_right = new THREE.Mesh(geometry, material);
+    scene.add(mesh_left);
+    scene.add(mesh_right);
+    mesh_left.position.y = 0.1;
+    mesh_right.position.y = 0.1;
+    flipperLeft = new Flipper(new THREE.Vector3(0, 0.1, 0), mesh_left, true);
+    flipperRight = new Flipper(new THREE.Vector3(0, 0.1, 0), mesh_right, false);
+
+    numLoaded++;
+    if (numLoaded == numToLoad) {
+      loop();
+    }
   });
 
-  // Cube
-  loader.load('border2.json', function(geometry) {
+  loader.load('res/border2.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
     mesh.position.y = 0.1;
     border = new Component(new THREE.Vector3(0, 0.1, 0), mesh);
+
+    numLoaded++;
+    if (numLoaded == numToLoad) {
+      loop();
+    }
   });
 }
 
 function loop() {
-    control();
     update();
     render();
+
     requestAnimationFrame(loop);
 }
 
 function update() {
     var delta = clock.getDelta();
+    control();
 
     machine.update();
     flipperLeft.update(delta);
