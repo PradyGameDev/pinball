@@ -17,6 +17,16 @@ class Component {
         this.pointValue_ = 0;
     }
 
+    //Quick initializer
+    setup(position, mesh, bounciness, velocity, acceleration, pointValue) {
+        this.position_ = position;
+        this.mesh_ = mesh; //THREE.js mesh
+        this.bounciness_ = bounciness;
+        this.velocity_ = velocity;
+        this.acceleration_ = acceleration;
+        this.pointValue_ = pointValue;
+    }
+
     // In degrees
     rotate(x, y, z) {
         this.mesh_.rotateX(THREE.Math.degToRad(x));
