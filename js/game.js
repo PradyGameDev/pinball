@@ -116,4 +116,3 @@ function control() {
         flipperRight.flip();
     }
 }
-
