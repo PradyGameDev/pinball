@@ -10,35 +10,36 @@ class Flipper extends Component {
 
         this.isLeft = isLeft;
 
-        this.mesh_ = new THREE.Mesh(this.geometry_, this.material_);
-        this.restRotation = this.mesh_.rotation;
-
-        this.rotationalVelocity = new THREE.Euler(0, 0.1, 0, "XYZ");
+        this.restRotation = this.mesh.rotation.clone();
+        this.targetRotation = this.mesh.rotation;
 
         this.flipping = false;
+
+        this.t = 0;
     }
 
-    update() {
-        var dx = -this.rotationalVelocity.x;
-        var dy = -this.rotationalVelocity.y;
-        var dz = -this.rotationalVelocity.z;
-        this.rotationalVelocity.x += damping.x * dx;
-        this.rotationalVelocity.y += damping.y * dy;
-        this.rotationalVelocity.z += damping.z * dz;
+    update(dt) {
+        var qtarget = new THREE.Quaternion().setFromEuler(this.targetRotation);
 
-        this.rotate(this.rotationalVelocity.x, this.rotationalVelocity.y, this.rotationalVelocity.z);
+        if (this.flipping) {
+            this.mesh_.quaternion.slerp(qtarget, Math.min(1, this.t / FLIPPER_TIME));
+        } else {
+            this.mesh_.quaternion.slerp(qtarget, Math.min(1, this.t / FLIPPER_BACK_TIME));
+        }
 
-        if (approxeq(this.rotationalVelocity.x, 0) && approxeq(this.rotationalVelocity.y, 0) && approxeq(this.rotationalVelocity.z, 0)) {
-            if (this.flipping) {
-                if (this.isLeft) {
-                    this.rotationalVelocity = new THREE.Euler(0, 18, 0, "XYZ");
-                } else {
-                    this.rotationalVelocity = new THREE.Euler(0, -18, 0, "XYZ");
-                }
+        this.t += dt;
+
+        if (this.flipping) {
+            if (this.t > FLIPPER_TIME) {
+                this.targetRotation = this.restRotation;
+
+                this.t = 0;
 
                 this.goingBack = true;
                 this.flipping = false;
-            } else if (this.goingBack) {
+            }
+        } else if (this.goingBack) {
+            if (this.t > FLIPPER_BACK_TIME) {
                 this.goingBack = false;
                 this.flipping = false;
             }
@@ -49,10 +50,12 @@ class Flipper extends Component {
         if (!this.flipping && !this.goingBack) {
             this.flipping = true;
 
+            this.t = 0;
+
             if (this.isLeft) {
-                this.rotationalVelocity = new THREE.Euler(0, -18, 0, "XYZ");
+                this.targetRotation = new THREE.Euler(0, -0.8, 0, "XYZ");
             } else {
-                this.rotationalVelocity = new THREE.Euler(0, 18, 0, "XYZ");
+                this.targetRotation = new THREE.Euler(0, 0.8, 0, "XYZ");
             }
         }
     }
