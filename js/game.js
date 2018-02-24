@@ -8,7 +8,7 @@ var orbitControls;
 
 var flipperLeft, flipperRight;
 
-var keyboard;
+var keyboard, clock;
 
 init();
 function init() {
@@ -65,6 +65,7 @@ function initScene() {
   machine = new Machine();
 
   keyboard = new THREEx.KeyboardState();
+  clock = new THREE.Clock();
 
   flipperLeft = new Flipper(true);
   scene.add(flipperLeft.mesh);
@@ -90,9 +91,13 @@ function loop() {
 }
 
 function update() {
+    var delta = clock.getDelta();
+
     machine.update();
-    flipperLeft.update();
-    flipperRight.update();
+    flipperLeft.update(delta);
+    flipperLeft.physicsStep();
+    flipperRight.update(delta);
+    flipperRight.physicsStep();
 }
 
 function render() {
