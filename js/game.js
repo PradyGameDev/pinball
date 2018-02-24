@@ -51,7 +51,7 @@ function initScene() {
     // camera.rotation.x = -Math.PI / 2;
 
     // Renderer
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
@@ -74,9 +74,9 @@ function initScene() {
 function loadComponents() {
     loader = new THREE.JSONLoader();
 
-    // Machine
     machine = new Machine();
 
+    // improve loading mechanism
     var numLoaded = 0;
     var numToLoad = 2;
 
