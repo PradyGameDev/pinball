@@ -7,7 +7,7 @@ var ball, machine;
 
 // Components
 var jsonLoader;
-var gutter;
+var border;
 
 var flipperLeft, flipperRight;
 
@@ -18,6 +18,8 @@ function init() {
   initWindow();
   initScene();
   loadComponents();
+
+  keyboard = new THREEx.KeyboardState();
 
   loop();
 }
@@ -42,7 +44,7 @@ function initScene() {
 
   // Camera
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-  camera.position.set(0, 3, 0);
+  camera.position.set(0, 5, 0);
   camera.rotation.x = -Math.PI / 2;
 
   // Renderer
@@ -64,7 +66,6 @@ function initScene() {
   pointLight.castShadow = true;
   pointLight.position.set(0, 50, 0);
   scene.add(pointLight);
-
 }
 
 function loadComponents() {
@@ -73,21 +74,19 @@ function loadComponents() {
   // Machine
   machine = new Machine();
 
-  keyboard = new THREEx.KeyboardState();
-
   flipperLeft = new Flipper(true);
   // scene.add(flipperLeft.mesh);
 
   flipperRight = new Flipper(false);
   // scene.add(flipperRight.mesh);
 
-  // Cube
-  loader.load('/res/border.json', function(geometry) {
+  // Border
+  loader.load('/res/border2.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-    var gutterMesh = new THREE.Mesh(geometry, material);
-    scene.add(gutterMesh);
-    gutterMesh.position.y = 1;
-    gutter = new Gutter(new THREE.Vector3(0, 0.1, 0), gutterMesh);
+    var mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    mesh.position.y = 1;
+    border = new Component(new THREE.Vector3(0, 0.1, 0), mesh);
   });
 }
 
