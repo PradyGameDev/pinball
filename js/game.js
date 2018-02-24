@@ -44,8 +44,8 @@ function initScene() {
     // Camera
     camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     // Tilted
-    camera.position.set(0, 2.2, 1.4);
-    camera.rotation.x = -Math.PI / 3;
+    camera.position.set(0, 2, 1.9);
+    camera.rotation.x = -Math.PI / 4;
     // Top down
     // camera.position.set(0, 3, 0);
     // camera.rotation.x = -Math.PI / 2;
@@ -54,6 +54,7 @@ function initScene() {
     renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
+    // change resolution of shadow
     document.body.appendChild(renderer.domElement);
 
     // DEBUG Orbit Controls
@@ -67,7 +68,7 @@ function initScene() {
 
     var pointLight = new THREE.PointLight(0xffffff, 0.5);
     pointLight.castShadow = true;
-    pointLight.position.set(0, 2, 0);
+    pointLight.position.set(0, 10, 0);
     scene.add(pointLight);
 }
 
@@ -78,7 +79,7 @@ function loadComponents() {
 
     // Ball
     var geometry = new THREE.SphereGeometry(0.05, 32, 32);
-    var material = new THREE.MeshLambertMaterial({ color: 0xff00ff });
+    var material = new THREE.MeshLambertMaterial({ color: 0xffffff });
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
     ball = new Ball(new THREE.Vector3(0, 0.05, 0), mesh);
@@ -105,12 +106,12 @@ function loadComponents() {
     });
 
     loader.load('res/border.json', function(geometry) {
-        var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+        var material = new THREE.MeshLambertMaterial({ color: 0xA1887F });
         var mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
         // don't hard code values like 0.39131 or 0.1
-        border = new Component(new THREE.Vector3(-0.39131, -0.18, 0.215), mesh);
+        border = new Component(new THREE.Vector3(0, 0, 0), mesh);
 
         numLoaded++;
         if (numLoaded == numToLoad) {
