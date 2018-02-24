@@ -3,6 +3,9 @@ class Component {
     constructor(position, mesh) {
         this.position_ = position;
         this.mesh_ = mesh;
+        this.mesh_.position.x = this.position_.x;
+        this.mesh_.position.y = this.position_.y;
+        this.mesh_.position.z = this.position_.z;
 
         this.geometry_ = new THREE.BoxGeometry(this.position_);
         this.color_ = 0x00ff00;
@@ -16,9 +19,6 @@ class Component {
     }
 
     update() {
-        this.mesh_.position.x = this.position_.x;
-        this.mesh_.position.y = this.position_.y;
-        this.mesh_.position.z = this.position_.z;
     }
 
     physicsStep() {
@@ -49,6 +49,9 @@ class Component {
 
     set position(position) {
         this.position_ = position;
+        this.mesh_.position.x = this.position_.x;
+        this.mesh_.position.y = this.position_.y;
+        this.mesh_.position.z = this.position_.z;
     }
 
     get mesh() {
