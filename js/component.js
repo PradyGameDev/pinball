@@ -46,6 +46,7 @@ class Component {
         this.mesh_.rotation.x *= -1;
         this.mesh_.rotation.y *= -1;
         this.mesh_.rotation.z *= -1;
+        this.pointValue_+=other.pointValue_;
     }
 
     get position() {
