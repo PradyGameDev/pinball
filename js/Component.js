@@ -71,4 +71,4 @@ class Component
     {
         //TODO Implement collision handler
     }
-};
+}
