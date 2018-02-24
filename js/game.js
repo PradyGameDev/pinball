@@ -140,6 +140,9 @@ function update() {
     if (keyboard.pressed("right")) {
         flipperRight.flip();
     }
+    if (keyboard.pressed("spaced")) {
+        ball.launch();
+    }
 
     // Put this in a for loop
     // machine.update();
