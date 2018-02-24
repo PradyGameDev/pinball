@@ -1,10 +1,13 @@
 var width, height;
+
 var camera, scene, renderer;
-
-var jsonLoader;
-
-var ball, cube, ground;
 var orbitControls;
+
+var ball, machine;
+
+// Components
+var jsonLoader;
+var gutter;
 
 var flipperLeft, flipperRight;
 
@@ -13,8 +16,8 @@ var keyboard;
 init();
 function init() {
   initWindow();
-  loader = new THREE.JSONLoader();
   initScene();
+  loadComponents();
 
   loop();
 }
@@ -39,8 +42,8 @@ function initScene() {
 
   // Camera
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-  camera.position.set(0, 200, 150);
-  camera.rotation.x = -Math.PI / 3;
+  camera.position.set(0, 3, 0);
+  camera.rotation.x = -Math.PI / 2;
 
   // Renderer
   renderer = new THREE.WebGLRenderer();
@@ -49,9 +52,9 @@ function initScene() {
   document.body.appendChild(renderer.domElement);
 
   // DEBUG Orbit Controls
-  // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-  // orbitControls.addEventListener('change', renderer);
-  // orbitControls.enableZoom = false;
+  orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+  orbitControls.addEventListener('change', renderer);
+  orbitControls.enableZoom = false;
 
   // Lighting
   var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -62,23 +65,29 @@ function initScene() {
   pointLight.position.set(0, 50, 0);
   scene.add(pointLight);
 
+}
+
+function loadComponents() {
+  loader = new THREE.JSONLoader();
+
+  // Machine
   machine = new Machine();
 
   keyboard = new THREEx.KeyboardState();
 
   flipperLeft = new Flipper(true);
-  scene.add(flipperLeft.mesh);
+  // scene.add(flipperLeft.mesh);
 
   flipperRight = new Flipper(false);
-  scene.add(flipperRight.mesh);
+  // scene.add(flipperRight.mesh);
 
   // Cube
-  loader.load('cube.json', function(geometry) {
+  loader.load('/res/border.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-    var mesh = new THREE.Mesh(geometry, material);
-    mesh.scale.set(10, 10, 10);
-    mesh.position.set(-20, 5, 20);
-    scene.add(mesh);
+    var gutterMesh = new THREE.Mesh(geometry, material);
+    scene.add(gutterMesh);
+    gutterMesh.position.y = 1;
+    gutter = new Gutter(new THREE.Vector3(0, 0.1, 0), gutterMesh);
   });
 }
 

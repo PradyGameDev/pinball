@@ -10,7 +10,8 @@ class Flipper extends Component {
 
         this.isLeft = isLeft;
 
-        this.restRotation = this.mesh.rotatation;
+        this.mesh_ = new THREE.Mesh(this.geometry_, this.material_);
+        this.restRotation = this.mesh_.rotation;
 
         this.rotationalVelocity = new THREE.Euler(0, 0.1, 0, "XYZ");
 
