@@ -19,6 +19,11 @@ class Component {
     }
 
     update() {
+        // Keep mesh in sync with position
+        // cleaner way to do this? are they both vetor3 objects?
+        this.mesh_.position.x = this.position_.x;
+        this.mesh_.position.y = this.position_.y;
+        this.mesh_.position.z = this.position_.z;
     }
 
     physicsStep() {
