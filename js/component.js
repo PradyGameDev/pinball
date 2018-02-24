@@ -1,14 +1,17 @@
-class Component
-{
+var damping = new THREE.Euler(0, 0.4, 0, "XYZ");
+
+class Component {
     constructor() {
         //Position
         this.position_ = new THREE.Vector3(0, 0, 0);
         //Built in mesh object has geometry and material
         //Mesh has geometry + material
-        this.geometry_ = new THREE.BoxGeometry(this.position_);
+        var wallGeometry = new THREE.CubeGeometry( 100, 100, 20, 1, 1, 1 );
+        // this.geometry_ = new THREE.BoxGeometry(this.position_);
+        this.geometry_ = wallGeometry;
         this.color_ = 0x00ff00;
         this.material_ = new THREE.MeshBasicMaterial({color: this.color_});
-        this.mesh_ = new THREE.Mesh(this.geometry_, this.material);
+        this.mesh_ = new THREE.Mesh(this.geometry_, this.material_);
         //Floating point value representing extent of bounciness
         this.bounciness_ = 0.0;
         this.velocity_ = new THREE.Vector3(0, 0, 0);
@@ -16,6 +19,14 @@ class Component
         //Represents the point value of each component. The ball has no pointValue, whereas each of the collidable game objects have a score
         //that gets added to each player's score upon collision.
         this.pointValue_ = 0;
+
+        this.rotVelocity_ = new THREE.Euler(0,0,0,"XYZ");
+        this.rotTarget_ = new THREE.Euler(0,0,0,"XYZ");
+    }
+
+    physicsStep() {
+        this.position.add(this.acceleration);
+        this.position.add(this.velocity);
     }
 
     //Quick initializer
@@ -30,9 +41,9 @@ class Component
 
     // In degrees
     rotate(x, y, z) {
-        this.mesh_.rotateX(THREE.Math.degToRad(x));
-        this.mesh_.rotateY(THREE.Math.degToRad(y));
-        this.mesh_.rotateZ(THREE.Math.degToRad(z));
+        this.mesh_.rotateX(x);
+        this.mesh_.rotateY(y);
+        this.mesh_.rotateZ(z);
     }
 
     get position() {
@@ -59,6 +70,14 @@ class Component
         return this.pointValue_;
     }
 
+    get rotVelocity() {
+        return this.rotVelocity_;
+    }
+
+    get rotTarget() {
+        return this.rotTarget_;
+    }
+
     set position(position) {
         this.position_ = position;
     }
@@ -83,6 +102,14 @@ class Component
         this.pointValue_ = pointValue;
     }
 
+    set rotVelocity(rotVelocity) {
+        this.rotVelocity_ = rotVelocity;
+    }
+
+    set rotTarget(rotTarget) {
+        this.rotTarget_ = rotTarget;
+    }
+
     raycast(raycaster, intersects) {
         return this.mesh_.raycast(raycaster, intersects);
     }
@@ -91,3 +118,4 @@ class Component
         //TODO Implement collision handler
     }
 }
+
