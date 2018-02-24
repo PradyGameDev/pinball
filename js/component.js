@@ -78,5 +78,8 @@ class Component {
 
     collidedWith(other) {
         //TODO Implement collision handler
+        this.mesh_.rotation.x*=-1;
+        this.mesh_.rotation.y*=-1;
+        this.mesh_.rotation.z*=-1;
     }
 }
