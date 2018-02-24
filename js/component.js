@@ -5,10 +5,10 @@ class Component
         this.position_ = new THREE.Vector3(0, 0, 0);
         //Built in mesh object has geometry and material
         //Mesh has geometry + material
-        this.geometry_ = new THREE.BoxGeometry(position); 
+        this.geometry_ = new THREE.BoxGeometry(this.position_); 
         this.color_ = 0x00ff00;
-        this.material_ = new THREE.MeshBasicMaterial({color}); 
-        this.mesh_ = new THREE.Mesh(geometry, material);
+        this.material_ = new THREE.MeshBasicMaterial({color: this.color_}); 
+        this.mesh_ = new THREE.Mesh(this.geometry, this.material);
         //Floating point value representing extent of bounciness
         this.bounciness_ = 0.0;
         this.velocity_ = new THREE.Vector3(0, 0, 0);
