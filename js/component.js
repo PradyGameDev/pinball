@@ -1,4 +1,5 @@
 class Component {
+
     constructor(position, mesh) {
         this.position_ = position;
         this.mesh_ = mesh;
@@ -14,73 +15,21 @@ class Component {
         this.pointValue_ = 0;
     }
 
-    //Quick initializer
-    setup(position, mesh, bounciness, velocity, acceleration, pointValue) {
-        this.position_ = position;
-        this.mesh_ = mesh; //THREE.js mesh
-        this.bounciness_ = bounciness;
-        this.velocity_ = velocity;
-        this.acceleration_ = acceleration;
-        this.pointValue_ = pointValue;
+    update() {
+        this.mesh_.position.x = this.position_.x;
+        this.mesh_.position.y = this.position_.y;
+        this.mesh_.position.z = this.position_.z;
     }
 
     physicsStep() {
 
     }
 
-    // In degrees
     rotate(x, y, z) {
+        // In degrees
         this.mesh_.rotateX(THREE.Math.degToRad(x));
         this.mesh_.rotateY(THREE.Math.degToRad(y));
         this.mesh_.rotateZ(THREE.Math.degToRad(z));
-    }
-
-    get position() {
-        return this.position_;
-    }
-
-    get mesh() {
-        return this.mesh_;
-    }
-
-    get bounciness() {
-        return this.position_;
-    }
-
-    get velocity() {
-        return this.velocity_;
-    }
-
-    get acceleration() {
-        return this.acceleration_;
-    }
-
-    get pointValue() {
-        return this.pointValue_;
-    }
-
-    set position(position) {
-        this.position_ = position;
-    }
-
-    set mesh(mesh) {
-        this.mesh_ = mesh;
-    }
-
-    set bounciness(bounciness) {
-        this.bounciness_ = bounciness;
-    }
-
-    set velocity(velocity) {
-        this.velocity_ = velocity;
-    }
-
-    set acceleration(acceleration) {
-        this.acceleration_ = acceleration;
-    }
-
-    set pointValue(pointValue) {
-        this.pointValue_ = pointValue;
     }
 
     raycast(raycaster, intersects) {
@@ -88,9 +37,57 @@ class Component {
     }
 
     collidedWith(other) {
-        //TODO Implement collision handler
-        this.mesh_.rotation.x*=-1;
-        this.mesh_.rotation.y*=-1;
-        this.mesh_.rotation.z*=-1;
+        // TODO Implement collision handler
+        this.mesh_.rotation.x *= -1;
+        this.mesh_.rotation.y *= -1;
+        this.mesh_.rotation.z *= -1;
+    }
+
+    get position() {
+        return this.position_;
+    }
+
+    set position(position) {
+        this.position_ = position;
+    }
+
+    get mesh() {
+        return this.mesh_;
+    }
+
+    set mesh(mesh) {
+        this.mesh_ = mesh;
+    }
+
+    get bounciness() {
+        return this.position_;
+    }
+
+    set bounciness(bounciness) {
+        this.bounciness_ = bounciness;
+    }
+
+    get velocity() {
+        return this.velocity_;
+    }
+
+    set velocity(velocity) {
+        this.velocity_ = velocity;
+    }
+
+    get acceleration() {
+        return this.acceleration_;
+    }
+
+    set acceleration(acceleration) {
+        this.acceleration_ = acceleration;
+    }
+
+    get pointValue() {
+        return this.pointValue_;
+    }
+
+    set pointValue(pointValue) {
+        this.pointValue_ = pointValue;
     }
 }

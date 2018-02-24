@@ -3,138 +3,139 @@ var width, height;
 var camera, scene, renderer;
 var orbitControls;
 
-var ball, machine;
+var jsonLoader;
 
 // Components
-var jsonLoader;
+var components = [];
+var ball, machine;
 var border;
-
 var flipperLeft, flipperRight;
 
 var keyboard, clock;
 
 init();
 function init() {
-  initWindow();
-  initScene();
-  loadComponents();
+    initWindow();
+    initScene();
+    loadComponents();
 
-  keyboard = new THREEx.KeyboardState();
-  clock = new THREE.Clock();
+    keyboard = new THREEx.KeyboardState();
+    clock = new THREE.Clock();
 }
 
 function initWindow() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-
-  window.addEventListener('resize', function() {
     width = window.innerWidth;
     height = window.innerHeight;
-    renderer.setSize(width, height);
 
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }, false);
+    window.addEventListener('resize', function() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        renderer.setSize(width, height);
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    }, false);
 }
 
 function initScene() {
-  // Scene
-  scene = new THREE.Scene();
+    // Scene
+    scene = new THREE.Scene();
 
-  // Camera
-  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-  camera.position.set(0, 5, 0);
-  camera.rotation.x = -Math.PI / 2;
+    // Camera
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    // Tilted
+    camera.position.set(0, 2.2, 1.4);
+    camera.rotation.x = -Math.PI / 3;
+    // Top down
+    // camera.position.set(0, 3, 0);
+    // camera.rotation.x = -Math.PI / 2;
 
-  // Renderer
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize(width, height);
-  renderer.shadowMap.enabled = true;
-  document.body.appendChild(renderer.domElement);
+    // Renderer
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true;
+    document.body.appendChild(renderer.domElement);
 
-  // DEBUG Orbit Controls
-  // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
-  // orbitControls.addEventListener('change', renderer);
-  // orbitControls.enableZoom = false;
+    // DEBUG Orbit Controls
+    // orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+    // orbitControls.addEventListener('change', renderer);
+    // orbitControls.enableZoom = false;
 
-  // Lighting
-  var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
+    // Lighting
+    var ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
 
-  var pointLight = new THREE.PointLight(0xffffff, 0.5);
-  pointLight.castShadow = true;
-  pointLight.position.set(0, 50, 0);
-  scene.add(pointLight);
+    var pointLight = new THREE.PointLight(0xffffff, 0.5);
+    pointLight.castShadow = true;
+    pointLight.position.set(0, 2, 0);
+    scene.add(pointLight);
 }
 
 function loadComponents() {
-  loader = new THREE.JSONLoader();
+    loader = new THREE.JSONLoader();
 
-  // Machine
-  machine = new Machine();
+    // Machine
+    machine = new Machine();
 
-  var numLoaded = 0;
-  var numToLoad = 2;
+    var numLoaded = 0;
+    var numToLoad = 2;
 
-  loader.load('res/flipper1.json', function(geometry) {
-    var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
-    var mesh_left = new THREE.Mesh(geometry, material);
-    var mesh_right = new THREE.Mesh(geometry, material);
-    scene.add(mesh_left);
-    scene.add(mesh_right);
-    mesh_left.position.y = 0.1;
-    mesh_right.position.y = 0.1;
-    flipperLeft = new Flipper(new THREE.Vector3(0, 0.1, 0), mesh_left, true);
-    flipperRight = new Flipper(new THREE.Vector3(0, 0.1, 0), mesh_right, false);
+    loader.load('res/flipper.json', function(geometry) {
+        var material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
 
-    numLoaded++;
-    if (numLoaded == numToLoad) {
-      loop();
-    }
-  });
+        var mesh_left = new THREE.Mesh(geometry, material);
+        scene.add(mesh_left);
+        flipperLeft = new Flipper(new THREE.Vector3(0, 0, 0), mesh_left, true);
 
-  loader.load('res/border2.json', function(geometry) {
-    var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-    mesh.position.y = 0.1;
-    border = new Component(new THREE.Vector3(0, 0.1, 0), mesh);
+        var mesh_right = new THREE.Mesh(geometry, material);
+        scene.add(mesh_right);
+        flipperRight = new Flipper(new THREE.Vector3(0, 0, 0), mesh_right, false);
 
-    numLoaded++;
-    if (numLoaded == numToLoad) {
-      loop();
-    }
-  });
+        numLoaded++;
+        if (numLoaded == numToLoad) {
+            loop();
+        }
+    });
+
+    loader.load('res/border.json', function(geometry) {
+        var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+        var mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+        // don't hard code values like 0.39131 or 0.1
+        border = new Component(new THREE.Vector3(-0.39131, -0.18, 0.215), mesh);
+
+        numLoaded++;
+        if (numLoaded == numToLoad) {
+            loop();
+        }
+    });
 }
 
 function loop() {
     update();
     render();
-
     requestAnimationFrame(loop);
 }
 
 function update() {
     var delta = clock.getDelta();
-    control();
 
+    if (keyboard.pressed("left")) {
+        flipperLeft.flip();
+    }
+    if (keyboard.pressed("right")) {
+        flipperRight.flip();
+    }
+
+    // Put this in a for loop
     machine.update();
+    border.update();
     flipperLeft.update(delta);
-    flipperLeft.physicsStep();
+    flipperLeft.physicsStep(); // make this get called in flipper.update
     flipperRight.update(delta);
     flipperRight.physicsStep();
 }
 
 function render() {
-  renderer.render(scene, camera);
-}
-
-function control() {
-    if (keyboard.pressed("left")) {
-        flipperLeft.flip();
-    }
-
-    if (keyboard.pressed("right")) {
-        flipperRight.flip();
-    }
+    renderer.render(scene, camera);
 }
