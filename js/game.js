@@ -85,7 +85,7 @@ function loadComponents() {
   // scene.add(flipperRight.mesh);
 
   // Cube
-  loader.load('cube.json', function(geometry) {
+  loader.load('border2.json', function(geometry) {
     var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
     var mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(10, 10, 10);
