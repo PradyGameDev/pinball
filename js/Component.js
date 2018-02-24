@@ -1,7 +1,6 @@
 class Component
 {
-    constructor()
-    {
+    constructor() {
         //Position
         this.position = new THREE.Vector3(0, 0, 0);
         //Built in mesh object has geometry and material
@@ -14,61 +13,74 @@ class Component
         this.bounciness = 0.0;
         this.velocity = new THREE.Vector3(0, 0, 0);
         this.acceleration = new THREE.Vector3(0, 0, 0);
+        //Represents the point value of each component. The ball has no pointValue, whereas each of the collidable game objects have a score
+        //that gets added to each player's score upon collision.
+        this.pointValue = 0;
     }
-    constructor(position, mesh, bounciness, velocity, acceleration)
-    {
+
+    //Initializer
+    setup(position, mesh, bounciness, velocity, acceleration, pointValue) {
         this.position = position;
         this.mesh = mesh; //THREE.js mesh
         this.bounciness = bounciness;
         this.velocity = velocity;
         this.acceleration = acceleration;
+        this.pointValue = pointValue;
     }
-    get position()
-    {
+
+    get position() {
         return this.position;
     }
-    get mesh()
-    {
+
+    get mesh() {
         return this.mesh;
     }
-    get bounciness()
-    {
+
+    get bounciness() {
         return this.position;
     }
-    get velocity()
-    {
+
+    get velocity() {
         return this.velocity;
     }
-    get acceleration()
-    {
+
+    get acceleration() {
         return this.acceleration;
     }
-    set position(position)
-    {
+
+    get pointValue() {
+        return this.pointValue;
+    }
+
+    set position(position) {
         this.position = position;
     }
-    set mesh(mesh)
-    {
+
+    set mesh(mesh) {
         this.mesh = mesh;
     }
-    set bounciness(bounciness)
-    {
+
+    set bounciness(bounciness) {
         this.bounciness = bounciness;
     }
-    set velocity(velocity)
-    {
+
+    set velocity(velocity) {
         this.velocity = velocity;
     }
-    set acceleration(acceleration)
-    {
+
+    set acceleration(acceleration) {
         this.acceleration = acceleration;
     }
-    raycasted(raycaster, intersects)
-    {
+
+    set pointValue(pointValue) {
+        this.pointValue = pointValue;
+    }
+
+    raycast(raycaster, intersects) {
         return this.mesh.raycast(raycaster, intersects);
     }
-    collidedWith(other)
-    {
+
+    collidedWith(other) {
         //TODO Implement collision handler
     }
 }
